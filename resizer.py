@@ -7,6 +7,7 @@ from PIL import Image
 class Resizer():
 
     def __init__(self, dirname):
+        self._resized_dir_name = "resized/"
         self._dirname = dirname
         self._img_counter = {'total': 0, 'success': 0, 'failed': 0}
 
@@ -29,15 +30,15 @@ class Resizer():
             wpercent = (basewidth / float(img.size[0]))
             hsize = int((float(img.size[1]) * float(wpercent)))
             img = img.resize((basewidth, hsize), PIL.Image.ANTIALIAS)
-            if not os.path.exists('photos/resized'):  
-                os.mkdir('photos/resized')  
+            if not os.path.exists(os.path.join(self._dirname, self._resized_dir_name)):
+                os.mkdir(os.path.join(self._dirname, self._resized_dir_name))
 
             resizedFilename = '{0}'.format(os.path.basename(filename))
 
             if os.path.exists(resizedFilename):
                 os.remove(resizedFilename)
 
-            img.save(os.path.join(self._dirname, "resized/", resizedFilename))
+            img.save(os.path.join(self._dirname, self._resized_dir_name, resizedFilename))
 
             self._img_counter['success'] = self._img_counter['success'] + 1
         except IOError as e:
